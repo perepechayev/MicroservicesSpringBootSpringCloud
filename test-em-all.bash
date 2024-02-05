@@ -11,7 +11,6 @@
 : $(PROD_ID_NO_REC=113)
 : $(PROD_ID_NO_REVS=213)
 
-
 function assertCurl() {
     local expectedHttpCode=$1
     local curlCmd="$2 -w \"%{http_code}\""
