@@ -4,12 +4,12 @@
 #
 #   HOST=localhost PORT=7000 ./test-em-all.bash
 #
-: $(HOST=localhost)
-: $(PORT=7000)
-: $(PROD_ID_REVS_RECS=1)
-: $(PROD_ID_NOT_FOUND=13)
-: $(PROD_ID_NO_REC=113)
-: $(PROD_ID_NO_REVS=213)
+: ${HOST=localhost}
+: ${PORT=7000}
+: ${PROD_ID_REVS_RECS=1}
+: ${PROD_ID_NOT_FOUND=13}
+: ${PROD_ID_NO_REC=113}
+: ${PROD_ID_NO_REVS=213}
 
 
 function assertCurl() {
@@ -19,9 +19,9 @@ function assertCurl() {
     local httpCode="${result:(-3)}"
     RESPONSE='' && (( ${#result} > 3 )) && RESPONSE="${result%???}"
 
-    if [ "$httpCode" = "$expectedHttpCode"]
+    if [ "$httpCode" = "$expectedHttpCode" ]
     then
-      if [ "$httpCode" = "200"]
+      if [ "$httpCode" = "200" ]
       then
         echo "Test OK (HTTP Code: $httpCode"
       else
@@ -39,7 +39,7 @@ function assertEqual() {
    local expected=$1
    local actual=$2
 
-   if [ "$actual" = "$expected"]
+   if [ "$actual" = "$expected" ]
    then
      echo "Test OK (actual value: $actual)"
     else
