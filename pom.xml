@@ -22,6 +22,7 @@
         <maven.compiler.target>20</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring.boot.version>3.2.2</spring.boot.version>
+        <openapi.version>2.3.0</openapi.version>
     </properties>
 
     <dependencyManagement>
@@ -48,7 +49,18 @@
                 <artifactId>spring-boot-starter-log4j2</artifactId>
                 <version>${spring.boot.version}</version>
             </dependency>
-<!--            <dependency>-->
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-common</artifactId>
+                <version>${openapi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webflux-ui</artifactId>
+                <version>${openapi.version}</version>
+            </dependency>
+
+            <!--            <dependency>-->
 <!--                <groupId>io.projectreactor</groupId>-->
 <!--                <artifactId>reactor-test</artifactId>-->
 <!--                <version>${spring.boot.version}</version>-->

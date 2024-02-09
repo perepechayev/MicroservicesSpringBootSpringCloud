@@ -1,5 +1,6 @@
 package org.psp.util.http;
 
+import org.psp.api.exceptions.BadRequestException;
 import org.psp.api.exceptions.InvalidInputException;
 import org.psp.api.exceptions.NotFoundException;
 import org.slf4j.LoggerFactory;
@@ -15,6 +16,12 @@ import org.slf4j.Logger;
 @RestControllerAdvice
 public class GlobalControllerExceptionHandler {
     private static final Logger LOG = LoggerFactory.getLogger(GlobalControllerExceptionHandler.class);
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(BadRequestException.class)
+    public @ResponseBody HttpErrorInfo handleBadRequestException(ServerHttpRequest request, NotFoundException ex) {
+        return createHttpError(HttpStatus.BAD_REQUEST, request, ex);
+    }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NotFoundException.class)
