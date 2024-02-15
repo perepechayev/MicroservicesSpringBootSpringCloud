@@ -3,6 +3,13 @@ server:
   error:
     include-message: always
 
+spring:
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: product-db
+
 logging:
   level:
     root: INFO
@@ -12,3 +19,8 @@ logging:
 spring.config.activate.on-profile: docker
 
 server.port: 8080
+
+spring:
+  data:
+    mongodb:
+      host: mongodb

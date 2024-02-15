@@ -3,6 +3,19 @@ server:
   error:
     include-message: always
 
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+  datasource:
+    url: jdbc:mysql://localhost/review-db
+    username: user
+    password: pwd
+
+    hikari:
+      initializationFailTimeout: 60000
+
 logging:
   level:
     root: INFO
@@ -12,3 +25,7 @@ logging:
 spring.config.activate.on-profile: docker
 
 server.port: 8080
+
+spring:
+  datasource:
+    url: jdbc:mysql://mysql/review-db
