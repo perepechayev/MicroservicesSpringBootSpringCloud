@@ -18,7 +18,9 @@ public class PersistenceTests extends MongoDbTestBase {
 
     @BeforeEach
     public void setupDb() {
+System.out.println("Deleting all");
         repository.deleteAll();
+System.out.println("Deleted");
         ProductEntity entity = new ProductEntity(1, "n", 1);
         savedEntity = repository.save(entity);
         assertEqualsProduct(entity, savedEntity);
