@@ -24,6 +24,7 @@
         <spring.boot.version>3.2.2</spring.boot.version>
         <openapi.version>2.3.0</openapi.version>
         <mysql.version>8.0.32</mysql.version>
+        <jackson.version>2.15.0</jackson.version>
         <lombok.version>1.18.30</lombok.version>
         <mapstruct.version>1.6.0.Beta1</mapstruct.version>
         <mapstructbinding.version>0.2.0</mapstructbinding.version>
@@ -73,6 +74,11 @@
                 <groupId>org.springdoc</groupId>
                 <artifactId>springdoc-openapi-starter-webflux-ui</artifactId>
                 <version>${openapi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-annotations</artifactId>
+                <version>${jackson.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.mysql</groupId>
