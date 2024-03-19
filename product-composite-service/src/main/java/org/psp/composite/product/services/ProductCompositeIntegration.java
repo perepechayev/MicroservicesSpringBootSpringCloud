@@ -21,6 +21,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.HttpStatus;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,32 +55,59 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
 
     @Override
     public Product createProduct(Product body) {
-        return null;
+        try {
+            return restTemplate.postForObject(productServiceUrl, body, Product.class);
+        } catch(HttpClientErrorException ex) {
+            throw handleHttpClientException(ex);
+        }
     }
 
     @Override
     public void deleteProduct(int productId) {
-
+        try {
+            String url = productServiceUrl + productId;
+            restTemplate.delete(url);
+        } catch(HttpClientErrorException ex) {
+            throw handleHttpClientException(ex);
+        }
     }
 
     @Override
     public Recommendation createRecommendation(Recommendation body) {
-        return null;
+        try {
+            return restTemplate.postForObject(recommendationServiceUrl, body, Recommendation.class);
+        } catch(HttpClientErrorException ex) {
+            throw handleHttpClientException(ex);
+        }
     }
 
     @Override
     public void deleteRecommendation(int productId) {
-
+        try {
+            String url = recommendationServiceUrl + productId;
+            restTemplate.delete(url);
+        } catch(HttpClientErrorException ex) {
+            handleHttpClientException(ex);
+        }
     }
 
     @Override
     public Review createReview(Review body) {
-        return null;
+        try {
+            return restTemplate.postForObject(reviewServiceUrl, body, Review.class);
+        } catch (HttpClientErrorException ex) {
+            throw handleHttpClientException(ex);
+        }
     }
 
     @Override
     public void deleteReview(int productId) {
-
+        try {
+            String url = reviewServiceUrl+ productId;
+            restTemplate.delete(url);
+        } catch (HttpClientErrorException ex) {
+            throw handleHttpClientException(ex);
+        }
     }
 
     public Product getProduct(int productId) {
@@ -92,17 +120,7 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
 
             return product;
         } catch (HttpClientErrorException ex) {
-            switch(HttpStatus.resolve(ex.getStatusCode().value())) {
-                case NOT_FOUND:
-                    throw new NotFoundException(getErrorMessage(ex));
-                case UNPROCESSABLE_ENTITY:
-                    throw new InvalidInputException(getErrorMessage(ex));
-
-                default:
-                    LOG.warn("Got an unexpected HTTP error: {}, will rethrow it", ex.getStatusCode());
-                    LOG.warn("Error body: {}", ex.getResponseBodyAsString());
-                    throw ex;
-            }
+            throw handleHttpClientException(ex);
         }
     }
 
@@ -142,6 +160,20 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
         } catch(Exception ex) {
             LOG.warn("Got an exception while requesting reviews, return zero reviews: {}", ex.getMessage());
             return new ArrayList<>();
+        }
+    }
+
+    private RuntimeException handleHttpClientException(HttpClientErrorException ex) {
+        switch(HttpStatus.resolve(ex.getStatusCode().value())) {
+            case NOT_FOUND:
+                throw new NotFoundException(getErrorMessage(ex));
+            case UNPROCESSABLE_ENTITY:
+                throw new InvalidInputException(getErrorMessage(ex));
+
+            default:
+                LOG.warn("Got an unexpected HTTP error: {}, will rethrow it", ex.getStatusCode());
+                LOG.warn("Error body: {}", ex.getResponseBodyAsString());
+                throw ex;
         }
     }
 }

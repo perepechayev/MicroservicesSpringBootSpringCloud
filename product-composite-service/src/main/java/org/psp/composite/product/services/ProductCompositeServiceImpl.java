@@ -6,6 +6,7 @@ import org.psp.api.core.recommendation.Recommendation;
 import org.psp.api.core.review.Review;
 import org.psp.api.exceptions.NotFoundException;
 import org.psp.util.http.ServiceUtil;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -22,6 +23,26 @@ public class ProductCompositeServiceImpl implements ProductCompositeService {
     }
 
     @Override
+    public void createProduct(@RequestBody ProductAggregate body) {
+        Product product = new Product(body.getProductId(), body.getName(), body.getWeight(), null);
+        integration.createProduct(product);
+
+        if (body.getRecommendations() != null) {
+            body.getRecommendations().forEach(r -> {
+                Recommendation recommendation = new Recommendation(body.getProductId(), r.getRecommendationId(), r.getAuthor(), r.getRate(), r.getContent(), null);
+                integration.createRecommendation(recommendation);
+            });
+        }
+
+        if (body.getReviews() != null) {
+            body.getReviews().forEach(r -> {
+                Review review = new Review(body.getProductId(), r.getReviewId(), r.getAuthor(), r.getSubject(), r.getContent(), null);
+                integration.createReview(review);
+            });
+        }
+    }
+
+    @Override
     public ProductAggregate getProduct(int productId) {
         Product product = integration.getProduct(productId);
         if (product == null) {
@@ -33,6 +54,13 @@ public class ProductCompositeServiceImpl implements ProductCompositeService {
         return createProductAggregate(product, recommendations, reviews, serviceUtil.getServiceAddress());
     }
 
+    @Override
+    public void deleteProduct(int productId) {
+        integration.deleteProduct(productId);
+        integration.deleteRecommendation(productId);
+        integration.deleteReview(productId);
+    }
+
     private ProductAggregate createProductAggregate(Product product, List<Recommendation> recommendations,
                                                     List<Review> reviews, String serviceAddress) {
         int productId = product.getProductId();
@@ -41,12 +69,12 @@ public class ProductCompositeServiceImpl implements ProductCompositeService {
 
         List<RecommendationSummary> recommendationSummaries = (recommendations == null) ? null
                 : recommendations.stream()
-                .map(r -> new RecommendationSummary(r.getRecommendationId(), r.getAuthor(), r.getRate()))
+                .map(r -> new RecommendationSummary(r.getRecommendationId(), r.getAuthor(), r.getRate(), r.getContent()))
                 .collect(Collectors.toList());
 
         List<ReviewSummary> reviewSummaries = (reviews == null) ? null
                 : reviews.stream()
-                .map(r -> new ReviewSummary(r.getReviewId(), r.getAuthor(), r.getSubject()))
+                .map(r -> new ReviewSummary(r.getReviewId(), r.getAuthor(), r.getSubject(), r.getContent()))
                 .collect(Collectors.toList());
 
         String productAddress = product.getServiceAddress();
