@@ -28,5 +28,5 @@ public interface ProductCompositeService {
     ProductAggregate getProduct(@PathVariable("productId") int productId);
 
     @DeleteMapping("/product-composite/{productId}")
-    void deleteProduct(@PathVariable int productId);
+    void deleteProduct(@PathVariable("productId") int productId);
 }
