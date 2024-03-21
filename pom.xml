@@ -28,11 +28,26 @@
         <lombok.version>1.18.30</lombok.version>
         <mapstruct.version>1.6.0.Beta1</mapstruct.version>
         <mapstructbinding.version>0.2.0</mapstructbinding.version>
+        <byte-buddy.version>1.14.9</byte-buddy.version>
         <testcontainers.version>1.19.5</testcontainers.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>net.bytebuddy</groupId>
+                <artifactId>byte-buddy</artifactId>
+                <version>${byte-buddy.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>net.bytebuddy</groupId>
+                <artifactId>byte-buddy-agent</artifactId>
+                <version>${byte-buddy.version}</version>
+                <scope>test</scope>
+            </dependency>
+
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-actuator</artifactId>
