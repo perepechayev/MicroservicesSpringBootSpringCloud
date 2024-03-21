@@ -14,6 +14,7 @@ logging:
   level:
     root: INFO
     org.psp: DEBUG
+    org.springframework.data.mongodb.core.MongoTemplate: DEBUG
 
 ---
 spring.config.activate.on-profile: docker
