@@ -44,7 +44,7 @@ services:
     command: mongod
     healthcheck:
       test: "mongostat -n 1"
-      interval: 5s
+      interval: 10s
       timeout: 2s
       retries: 60
 
