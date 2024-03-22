@@ -13,10 +13,10 @@ public interface RecommendationService {
     Recommendation createRecommendation(@RequestBody Recommendation body);
 
     @GetMapping(
-            value = "/recommendation",
+            value = "/recommendation/{productId}",
             produces = "application/json")
     List<Recommendation> getRecommendations(@PathVariable("productId") int productId);
 
-    @DeleteMapping(value = "/recommendation")
+    @DeleteMapping(value = "/recommendation/{productId}")
     void deleteRecommendation(@PathVariable("productId") int productId);
 }
