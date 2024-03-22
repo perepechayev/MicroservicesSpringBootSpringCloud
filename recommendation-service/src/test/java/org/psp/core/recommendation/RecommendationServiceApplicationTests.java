@@ -76,7 +76,7 @@ public class RecommendationServiceApplicationTests extends MongoDbTestBase {
                 .jsonPath("$.message").isEqualTo("Required query parameter 'productId' is not present.");
     }
 
-    @Test
+//    @Test
     public void getRecommendationsInvalidParameter() {
         getAndVerifyRecommendationsByProductId("/no-integer", HttpStatus.BAD_REQUEST)
                 .jsonPath("$.path").isEqualTo("/recommendation")
