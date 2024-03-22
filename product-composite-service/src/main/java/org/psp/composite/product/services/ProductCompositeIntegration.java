@@ -15,13 +15,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.http.HttpStatus;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,9 +46,9 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
                                        @Value("${app.review-service.port}") int reviewServicePort) {
         this.restTemplate = restTemplate;
         this.mapper = mapper;
-        this.productServiceUrl = "http://" + productServiceHost + ":" + productServicePort + "/product/";
-        this.recommendationServiceUrl = "http://" + recommendationServiceHost + ":" + recommendationServicePort + "/recommendation?productId=";
-        this.reviewServiceUrl = "http://" + reviewServiceHost + ":" + reviewServicePort + "/review/";
+        this.productServiceUrl = "http://" + productServiceHost + ":" + productServicePort + "/product";
+        this.recommendationServiceUrl = "http://" + recommendationServiceHost + ":" + recommendationServicePort + "/recommendation";
+        this.reviewServiceUrl = "http://" + reviewServiceHost + ":" + reviewServicePort + "/review";
     }
 
     @Override
@@ -65,7 +63,7 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
     @Override
     public void deleteProduct(int productId) {
         try {
-            String url = productServiceUrl + productId;
+            String url = productServiceUrl + "/" + productId;
             restTemplate.delete(url);
         } catch(HttpClientErrorException ex) {
             throw handleHttpClientException(ex);
@@ -84,7 +82,7 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
     @Override
     public void deleteRecommendation(int productId) {
         try {
-            String url = recommendationServiceUrl + productId;
+            String url = recommendationServiceUrl + "/" + productId;
             restTemplate.delete(url);
         } catch(HttpClientErrorException ex) {
             handleHttpClientException(ex);
@@ -103,7 +101,7 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
     @Override
     public void deleteReview(int productId) {
         try {
-            String url = reviewServiceUrl+ productId;
+            String url = reviewServiceUrl + "/" + productId;
             restTemplate.delete(url);
         } catch (HttpClientErrorException ex) {
             throw handleHttpClientException(ex);
@@ -112,7 +110,7 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
 
     public Product getProduct(int productId) {
         try {
-            String url = productServiceUrl + productId;
+            String url = productServiceUrl + "/" + productId;
             LOG.debug("Will call getProduct API on URL: {}", url);
 
             Product product = restTemplate.getForObject(url, Product.class);
@@ -134,7 +132,7 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
 
     public List<Recommendation> getRecommendations(int productId) {
         try {
-            String url = recommendationServiceUrl + productId;
+            String url = recommendationServiceUrl + "/" + productId;
             LOG.debug("Will call getRecommendations API on URL: {}", url);
             List<Recommendation> recommendations = restTemplate.exchange(url, GET, null,
                     new ParameterizedTypeReference<List<Recommendation>>(){})
@@ -149,7 +147,7 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
 
     public List<Review> getReviews(int productId) {
         try {
-            String url = reviewServiceUrl + productId;
+            String url = reviewServiceUrl + "/" + productId;
             LOG.debug("Will call getReviews API on URL: {}", url);
             List<Review> reviews = restTemplate.exchange(url, GET, null,
                     new ParameterizedTypeReference<List<Review>>() {})

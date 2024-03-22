@@ -15,9 +15,8 @@ public interface RecommendationService {
     @GetMapping(
             value = "/recommendation",
             produces = "application/json")
-    List<Recommendation> getRecommendations(
-            @RequestParam(value = "productId", required = true) int productId);
+    List<Recommendation> getRecommendations(@PathVariable("productId") int productId);
 
     @DeleteMapping(value = "/recommendation")
-    void deleteRecommendation(@RequestParam(value = "productId", required = true) int productId);
+    void deleteRecommendation(@PathVariable("productId") int productId);
 }

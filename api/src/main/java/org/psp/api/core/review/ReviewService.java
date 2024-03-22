@@ -19,5 +19,5 @@ public interface ReviewService {
     List<Review> getReviews(@PathVariable("productId") int productId);
 
     @DeleteMapping("/review")
-    void deleteReview(@RequestParam(value = "productId", required = true) int productId);
+    void deleteReview(@PathVariable("productId") int productId);
 }

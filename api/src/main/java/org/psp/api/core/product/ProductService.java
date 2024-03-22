@@ -17,5 +17,5 @@ public interface ProductService {
     Product getProduct(@PathVariable("productId") int productId);
 
     @DeleteMapping(value = "/product/{productId}")
-    void deleteProduct(@PathVariable int productId);
+    void deleteProduct(@PathVariable("productId") int productId);
 }
