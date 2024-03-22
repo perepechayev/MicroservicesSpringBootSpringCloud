@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.psp.api.composite.product.ProductAggregate;
 import org.psp.api.composite.product.RecommendationSummary;
 import org.psp.api.composite.product.ReviewSummary;
+import org.psp.api.composite.product.ServiceAddresses;
 import org.psp.api.core.product.Product;
 import org.psp.api.core.recommendation.Recommendation;
 import org.psp.api.core.review.Review;
@@ -54,7 +55,8 @@ class ProductCompositeServiceImplTest {
 
     @Test
     public void createCompositeProduct() {
-        ProductAggregate compositeProduct = new ProductAggregate(1, "name", 1, null, null, null);
+        ServiceAddresses serviceAddresses = new ServiceAddresses("1", "2", "3", "4");
+        ProductAggregate compositeProduct = new ProductAggregate(1, "name", 1, null, null, serviceAddresses);
         postAndVerifyProduct(compositeProduct, HttpStatus.OK);
     }
 
