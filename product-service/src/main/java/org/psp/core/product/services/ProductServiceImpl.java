@@ -15,7 +15,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.logging.Level;
 
-import static java.util.logging.Level.FINE;
+import static java.util.logging.Level.*;
 
 @RestController
 public class ProductServiceImpl implements ProductService {
@@ -65,9 +65,15 @@ public class ProductServiceImpl implements ProductService {
             throw new InvalidInputException("Invalid product id: " + productId);
         }
         LOG.debug("deleteProduct: tries to delete an entity with productId: {}", productId);
+         System.out.println("---------------------");
         return repository.findByProductId(productId)
-                .log(LOG.getName(), FINE)
-                .map(e -> repository.delete(e))
+                .log("++++++++++++++++++++++++"+ LOG.getName(), WARNING)
+                .map(e -> { 
+                  reactor.core.publisher.Mono<Void> m = repository.delete(e);
+                  System.out.println("++++++++++++++++++++");
+                  return m;
+                  }
+                )
                 .flatMap(e -> e);
     }
 

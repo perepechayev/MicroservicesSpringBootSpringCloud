@@ -47,7 +47,7 @@ public class PersistenceTests extends MongoDbTestBase {
                 .verifyComplete();
     }
 
-//    @Test
+    @Test
     public void update() {
         savedEntity.setName("n2");
         StepVerifier.create(repository.save(savedEntity))
@@ -61,7 +61,7 @@ public class PersistenceTests extends MongoDbTestBase {
                 .verifyComplete();
     }
 
-//    @Test
+    @Test
     public void delete() {
         StepVerifier.create(repository.delete(savedEntity))
                 .verifyComplete();
@@ -70,7 +70,7 @@ public class PersistenceTests extends MongoDbTestBase {
                 .verifyComplete();
     }
 
-//    @Test
+    @Test
     public void getProductById() {
         StepVerifier.create(repository.findByProductId(savedEntity.getProductId()))
                 .expectNextMatches(foundEntity -> areProductEqual(savedEntity, foundEntity))
@@ -84,7 +84,7 @@ public class PersistenceTests extends MongoDbTestBase {
                 .verify();
     }
 
-//    @Test
+    @Test
     public void optimisticLockError() {
         ProductEntity entity1 = repository.findById(savedEntity.getId()).block();
         ProductEntity entity2 = repository.findById(savedEntity.getId()).block();

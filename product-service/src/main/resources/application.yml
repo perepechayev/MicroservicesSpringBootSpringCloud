@@ -13,6 +13,11 @@ spring:
     function:
       definition: messageProcessor
     stream:
+      defaultBinder: rabbit
+      default.contentType: application/json
+      bindings.messageProcessor-in-0:
+        destination: products
+        group: productsGroup        
       bindings:
         messageProcessor-in-0.consumer:
           maxAttempts: 3
@@ -22,13 +27,13 @@ spring:
 
       rabbit:
         bindings:
-          messageProcessor-in-0-consumer:
+          messageProcessor-in-0.consumer:
             autoBindDlq: true
             republishDlq: true
 
       kafka:
         bindings:
-          messagePocessor-in-0-consumer:
+          messageProcessor-in-0.consumer:
             enableDlq: true
         binder:
           brokers: 127.0.0.1
