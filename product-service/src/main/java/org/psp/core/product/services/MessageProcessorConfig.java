@@ -35,7 +35,7 @@ public class MessageProcessorConfig {
                 case DELETE:
                     int productId = event.getKey();
                     LOG.info("Delete product with productId: {}", productId);
-                    productService.deleteProduct(productId);
+                    productService.deleteProduct(productId).block();
                     break;
 
                 default:

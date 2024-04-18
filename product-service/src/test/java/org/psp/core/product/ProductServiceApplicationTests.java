@@ -32,7 +32,7 @@ public class ProductServiceApplicationTests extends MongoDbTestBase {
         repository.deleteAll().block();
     }
 
-//    @Test
+    @Test
     public void getProductById() {
         int productId = 1;
         assertNull(repository.findByProductId(productId).block());
@@ -72,7 +72,7 @@ public class ProductServiceApplicationTests extends MongoDbTestBase {
         sendDeleteProductEvent(productId);
     }
 
-//    @Test
+    @Test
     public void getProductNotFound() {
         int productNotFound = 13;
         getAndVerifyProduct(productNotFound, HttpStatus.NOT_FOUND)
