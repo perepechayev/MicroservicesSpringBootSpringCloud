@@ -80,7 +80,7 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
     }
 
     @Override
-    public void deleteRecommendation(int productId) {
+    public void deleteRecommendations(int productId) {
         try {
             String url = recommendationServiceUrl + "/" + productId;
             restTemplate.delete(url);

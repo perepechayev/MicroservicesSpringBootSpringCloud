@@ -57,7 +57,7 @@ public class ProductCompositeServiceImpl implements ProductCompositeService {
     @Override
     public void deleteProduct(int productId) {
         integration.deleteProduct(productId);
-        integration.deleteRecommendation(productId);
+        integration.deleteRecommendations(productId);
         integration.deleteReview(productId);
     }
 

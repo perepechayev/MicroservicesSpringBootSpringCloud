@@ -2,13 +2,17 @@ package org.psp.core.recommendation;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.psp.api.core.event.Event;
 import org.psp.api.core.recommendation.Recommendation;
 import org.psp.core.recommendation.persistence.RecommendationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
+
+import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static reactor.core.publisher.Mono.just;
@@ -20,9 +24,13 @@ public class RecommendationServiceApplicationTests extends MongoDbTestBase {
     @Autowired
     RecommendationRepository repository;
 
+    @Autowired
+    @Qualifier("messageProcessor")
+    private Consumer<Event<Integer, Recommendation>> messageProcessor;
+
     @BeforeEach
     void setupDb() {
-        repository.deleteAll();
+        repository.deleteAll().block();
     }
 
     @Test
@@ -32,29 +40,12 @@ public class RecommendationServiceApplicationTests extends MongoDbTestBase {
         postAndVerifyRecommendation(productId, 2, HttpStatus.OK);
         postAndVerifyRecommendation(productId, 3, HttpStatus.OK);
 
-        assertEquals(3, repository.findByProductId(productId).size());
+        assertEquals(3, repository.findByProductId(productId).count().block());
 
         getAndVerifyRecommendationsByProductId(productId, HttpStatus.OK)
                 .jsonPath("$.length()").isEqualTo(3)
                 .jsonPath("$[2].productId").isEqualTo(productId)
                 .jsonPath("$[2].recommendationId").isEqualTo(3);
-    }
-
-//    @Test
-    public void duplicateError() {
-        int productId = 1;
-        int recommendationId = 1;
-
-        postAndVerifyRecommendation(productId, recommendationId, HttpStatus.OK)
-                .jsonPath("$.productId").isEqualTo(productId)
-                .jsonPath("$.recommendationId").isEqualTo(recommendationId);
-
-        assertEquals(1, repository.count());
-
-        postAndVerifyRecommendation(productId, recommendationId, HttpStatus.UNPROCESSABLE_ENTITY)
-                .jsonPath("$.path").isEqualTo("/recommendation")
-                .jsonPath("$.message").isEqualTo("Duplicate key, Product Id: 1, Recommendation Id: 1");
-        assertEquals(1, repository.count());
     }
 
     @Test
@@ -63,39 +54,16 @@ public class RecommendationServiceApplicationTests extends MongoDbTestBase {
         int recommendationId = 1;
 
         postAndVerifyRecommendation(productId, recommendationId, HttpStatus.OK);
-        assertEquals(1, repository.findByProductId(productId).size());
+        assertEquals(1, repository.findByProductId(productId).count().block());
 
         deleteAndVerifyRecommendationsByProductId(productId, HttpStatus.OK);
-        assertEquals(0, repository.findByProductId(productId).size());
-    }
-
-//    @Test
-    public void getRecommendationsMissingParameter() {
-        getAndVerifyRecommendationsByProductId("/", HttpStatus.BAD_REQUEST)
-                .jsonPath("$.path").isEqualTo("/recommendation")
-                .jsonPath("$.message").isEqualTo("Required query parameter 'productId' is not present.");
-    }
-
-//    @Test
-    public void getRecommendationsInvalidParameter() {
-        getAndVerifyRecommendationsByProductId("/no-integer", HttpStatus.BAD_REQUEST)
-                .jsonPath("$.path").isEqualTo("/recommendation")
-                .jsonPath("$.message").isEqualTo("Type mismatch.");
+        assertEquals(0, repository.findByProductId(productId).count().block());
     }
 
     @Test
     public void getRecommendationsNotFound() {
         getAndVerifyRecommendationsByProductId(113, HttpStatus.OK)
                 .jsonPath("$.length()").isEqualTo(0);
-    }
-
-//    @Test
-    public void getRecommendationsInvalidParameterNegativeValue() {
-        int productId = -1;
-
-        getAndVerifyRecommendationsByProductId(productId, HttpStatus.UNPROCESSABLE_ENTITY)
-                .jsonPath("$.path").isEqualTo("/recommendation")
-                .jsonPath("$.message").isEqualTo("Invalid productId: " + productId);
     }
 
     private WebTestClient.BodyContentSpec getAndVerifyRecommendationsByProductId(int productId, HttpStatus expectedStatus) {
