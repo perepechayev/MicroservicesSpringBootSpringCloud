@@ -15,7 +15,6 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static reactor.core.publisher.Mono.just;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class RecommendationServiceApplicationTests extends MongoDbTestBase {
@@ -36,9 +35,9 @@ public class RecommendationServiceApplicationTests extends MongoDbTestBase {
     @Test
     public void getRecomendationsByProductId() {
         int productId = 1;
-        postAndVerifyRecommendation(productId, 1, HttpStatus.OK);
-        postAndVerifyRecommendation(productId, 2, HttpStatus.OK);
-        postAndVerifyRecommendation(productId, 3, HttpStatus.OK);
+        sendCreateRecommendationEvent(productId, 1);
+        sendCreateRecommendationEvent(productId, 2);
+        sendCreateRecommendationEvent(productId, 3);
 
         assertEquals(3, repository.findByProductId(productId).count().block());
 
@@ -53,10 +52,10 @@ public class RecommendationServiceApplicationTests extends MongoDbTestBase {
         int productId = 1;
         int recommendationId = 1;
 
-        postAndVerifyRecommendation(productId, recommendationId, HttpStatus.OK);
+        sendCreateRecommendationEvent(productId, recommendationId);
         assertEquals(1, repository.findByProductId(productId).count().block());
 
-        deleteAndVerifyRecommendationsByProductId(productId, HttpStatus.OK);
+        sendDeleteRecommendationEvent(productId);
         assertEquals(0, repository.findByProductId(productId).count().block());
     }
 
@@ -80,25 +79,15 @@ public class RecommendationServiceApplicationTests extends MongoDbTestBase {
                 .expectBody();
     }
 
-    private WebTestClient.BodyContentSpec postAndVerifyRecommendation(int productId, int recommendationId, HttpStatus expectedStatus) {
+    private void sendCreateRecommendationEvent(int productId, int recommendationId) {
         Recommendation recommendation = new Recommendation(productId, recommendationId,
                 "Author + " + recommendationId, recommendationId, "Content " + recommendationId, "SA");
-        return client.post()
-                .uri("/recommendation")
-                .body(just(recommendation), Recommendation.class)
-                .accept(MediaType.APPLICATION_JSON)
-                .exchange()
-                .expectStatus().isEqualTo(expectedStatus)
-                .expectHeader().contentType(MediaType.APPLICATION_JSON)
-                .expectBody();
+        Event<Integer, Recommendation> event = new Event<>(Event.Type.CREATE, productId, recommendation);
+        messageProcessor.accept(event);
     }
 
-    private WebTestClient.BodyContentSpec deleteAndVerifyRecommendationsByProductId(int productId, HttpStatus expectedStatus) {
-        return client.delete()
-                .uri("/recommendation/" + productId)
-                .accept(MediaType.APPLICATION_JSON)
-                .exchange()
-                .expectStatus().isEqualTo(expectedStatus)
-                .expectBody();
+    private void sendDeleteRecommendationEvent(int productId) {
+        Event<Integer, Recommendation> event = new Event<>(Event.Type.DELETE, productId, null);
+        messageProcessor.accept(event);
     }
 }
