@@ -3,6 +3,7 @@ package org.psp.core.review;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -13,11 +14,17 @@ import reactor.core.scheduler.Schedulers;
 
 @SpringBootApplication
 @ComponentScan("org.psp")
-@AllArgsConstructor
 public class ReviewServiceApplication {
     private static final Logger LOG = LoggerFactory.getLogger(ReviewServiceApplication.class);
     private final Integer threadPoolSize;
     private final Integer taskQueueSize;
+
+    public ReviewServiceApplication(
+            @Value("${app.threadPoolSize:10}") Integer threadPoolSize,
+            @Value("${app.taskQueueSize:100}") Integer taskQueueSize) {
+        this.threadPoolSize = threadPoolSize;
+        this.taskQueueSize = taskQueueSize;
+    }
 
     @Bean
     public Scheduler jdbcScheduler() {
