@@ -30,6 +30,7 @@ public interface ProductCompositeService {
             produces = "application/json")
     Mono<ProductAggregate> getProduct(@PathVariable("productId") int productId);
 
+    @ResponseStatus(HttpStatus.ACCEPTED)
     @DeleteMapping("/product-composite/{productId}")
     Mono<Void> deleteProduct(@PathVariable("productId") int productId);
 }

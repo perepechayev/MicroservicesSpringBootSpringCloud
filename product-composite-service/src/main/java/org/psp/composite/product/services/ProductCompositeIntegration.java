@@ -47,7 +47,7 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
     private final Scheduler publishEventScheduler;
 
     public ProductCompositeIntegration(@Qualifier("publishEventScheduler") Scheduler publishEventScheduler,
-                                       WebClient webClient,
+                                       WebClient.Builder webClient,
                                        ObjectMapper mapper,
                                        StreamBridge streamBridge,
                                        @Value("${app.product-service.host}") String productServiceHost,
@@ -57,7 +57,7 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
                                        @Value("${app.review-service.host}") String reviewServiceHost,
                                        @Value("${app.review-service.port}") int reviewServicePort) {
         this.publishEventScheduler = publishEventScheduler;
-        this.webClient = webClient;
+        this.webClient = webClient.build();
         this.mapper = mapper;
         this.streamBridge = streamBridge;
         this.productServiceUrl = "http://" + productServiceHost + ":" + productServicePort + "/product";
