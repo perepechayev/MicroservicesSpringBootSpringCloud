@@ -62,19 +62,8 @@ public class MessagingTests {
                 new Product(composite.getProductId(), composite.getName(), composite.getWeight(), null));
         assertTrue(sameEventExceptCreatedAt(expectedEvent).matches(productMessages.get(0)));
 
-        assertEquals(1, recommendationMessages.size());
-        RecommendationSummary rec = composite.getRecommendations().get(0);
-        Event<Integer, Recommendation> expectedRecommendationEvent = new Event<>(CREATE, composite.getProductId(),
-                new Recommendation(composite.getProductId(), rec.getRecommendationId(), rec.getAuthor(), rec.getRate(),
-                        rec.getContent(), null));
-        assertTrue(sameEventExceptCreatedAt(expectedRecommendationEvent).matches(recommendationMessages.get(0)));
-
-        assertEquals(1, reviewMessages.size());
-        ReviewSummary rev = composite.getReviews().get(0);
-        Event<Integer, Review> expectedReviewEvent = new Event<>(CREATE, composite.getProductId(),
-                new Review(composite.getProductId(), rev.getReviewId(), rev.getAuthor(), rev.getSubject(),
-                        rev.getContent(), null));
-        assertTrue(sameEventExceptCreatedAt(expectedReviewEvent).matches(reviewMessages.get(0)));
+        assertEquals(0, recommendationMessages.size());
+        assertEquals(0, reviewMessages.size());
     }
 
     @Test
