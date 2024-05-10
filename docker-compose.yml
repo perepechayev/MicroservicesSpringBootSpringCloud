@@ -65,3 +65,13 @@ services:
       interval: 5s
       timeout: 2s
       retries: 60
+  rabbitmq:
+    image: rabbitmq:3.11.8-management
+    mem_limit: 512mm
+    ports:
+      - 5672:5672
+      - 15672:15672
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 20s
+      retries: 60
