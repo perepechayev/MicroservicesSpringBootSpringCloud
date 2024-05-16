@@ -20,7 +20,7 @@ spring:
   cloud.stream:
     defaultBinder: rabbit
     default.contentType: application/json
-    bindinga.messageProcessor-in-0:
+    bindings.messageProcessor-in-0:
       destination: reviews
       group: reviewsGroup
 
@@ -31,11 +31,11 @@ spring:
     backOffMultiplier: 2.0
 
 
-  cloud.stream.rabbit.bindings.messageProcessor-in-consumer:
+  cloud.stream.rabbit.bindings.messageProcessor-in-0.consumer:
     autoBindDlq: true
-    repulishToDlq: true
+    republishToDlq: true
 
-  cloud.stream.kafka.bndings.messageProcessor-in-0.consumer:
+  cloud.stream.kafka.bindings.messageProcessor-in-0.consumer:
     enableDql: true
 
   cloud.stream.kafka.binder:

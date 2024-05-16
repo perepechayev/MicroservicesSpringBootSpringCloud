@@ -31,7 +31,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public Mono<Review> createReview(Review body) {
-        LOG.debug("createReview: created a new review entity: {}/{}", body.getProductId(), body.getReviewId());
+        LOG.info("createReview: created a new review entity: {}/{}", body.getProductId(), body.getReviewId());
         return Mono.fromCallable(() -> internalCreateReview(body))
                 .subscribeOn(jdbcScheduler);
     }
@@ -52,7 +52,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public Mono<Void> deleteReview(int productId) {
-        LOG.debug("deleteReviews: tries to delete reviews for the product with productId: {}", productId);
+        LOG.info("deleteReviews: tries to delete reviews for the product with productId: {}", productId);
         return Mono.fromRunnable(() -> internalDeleteReviews(productId));
     }
 
@@ -60,7 +60,7 @@ public class ReviewServiceImpl implements ReviewService {
         try {
             ReviewEntity entity = mapper.apiToEntity(body);
             ReviewEntity newEntity = repository.save(entity);
-            LOG.debug("createReview: created a review entity: {}/{}", body.getProductId(), body.getReviewId());
+            LOG.info("createReview: created a review entity: {}/{}", body.getProductId(), body.getReviewId());
             return mapper.entityToApi(entity);
         } catch (DataIntegrityViolationException ex) {
             throw new InvalidInputException("Duplicate key, product ID: " + body.getProductId() +

@@ -4,6 +4,8 @@ services:
   product:
     build: product-service
     mem_limit: 512m
+    ports:
+      - "7001:8080"
     environment:
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
@@ -46,7 +48,7 @@ services:
     command: mongod
     healthcheck:
       test: "mongostat -n 1"
-      interval: 10s
+      interval: 60s
       timeout: 2s
       retries: 60
 
