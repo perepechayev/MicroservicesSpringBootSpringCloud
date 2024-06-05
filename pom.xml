@@ -13,6 +13,7 @@
         <module>product-service</module>
         <module>recommendation-service</module>
         <module>review-service</module>
+        <module>spring-cloud/eureka-server</module>
         <module>api</module>
         <module>util</module>
     </modules>
@@ -83,6 +84,18 @@
                 <artifactId>spring-cloud-stream-test-binder</artifactId>
                 <version>${spring.cloud.stream.version}</version>
                 <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+                <version>${spring.cloud.stream.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+                <version>${spring.cloud.stream.version}</version>
             </dependency>
 
             <dependency>
@@ -169,6 +182,12 @@
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok-mapstruct-binding</artifactId>
                 <version>${mapstructbinding.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.code.gson</groupId>
+                <artifactId>gson</artifactId>
+                <version>2.8.2</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
