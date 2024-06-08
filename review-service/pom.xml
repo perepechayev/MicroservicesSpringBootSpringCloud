@@ -129,6 +129,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>3.2.2</version>
                 <configuration>
                     <mainClass>org.psp.core.review.ReviewServiceApplication</mainClass>
                     <layout>JAR</layout>
