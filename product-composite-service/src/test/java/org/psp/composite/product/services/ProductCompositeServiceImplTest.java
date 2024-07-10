@@ -20,7 +20,13 @@ import static java.util.Collections.singletonList;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+classes = {TestSecurityConfig.class},
+properties = {
+        "spring.security.oauth2.resourceserver.jwt.issuer-uri=",
+        "spring.main.allow-bean-definition-overriding=true",
+        "eureka.client.enabled=false"
+})
 class ProductCompositeServiceImplTest {
     private static final int PRODUCT_ID_OK = 1;
     private static final int PRODUCT_ID_NOT_FOUND = 2;

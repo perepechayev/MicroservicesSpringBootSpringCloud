@@ -5,7 +5,10 @@ server:
 
 spring.application.name: review
 
-app.eureka-server: localhost
+app:
+  eureka-username: u
+  eureka-password: p
+  eureka-server: localhost
 
 eureka:
   client:

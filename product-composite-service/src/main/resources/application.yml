@@ -5,8 +5,17 @@ spring:
   application:
     name: product-composite
 
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://${app.auth-server}:9999
+
 app:
+  eureka-username: u
+  eureka-password: p
   eureka-server: localhost
+  auth-server: localhost
 
 eureka:
   client:
