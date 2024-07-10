@@ -21,7 +21,8 @@ import static org.psp.api.core.event.Event.Type.DELETE;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
         properties = {
                 "spring.cloud.stream.defaultBider = rabbit",
-                "logging.level.org.psp = DEBUG"
+                "logging.level.org.psp = DEBUG",
+                "eureka.client.enabled=false"
         })
 public class ReviewServiceApplicationTests extends MySqlTestBase {
     @Autowired

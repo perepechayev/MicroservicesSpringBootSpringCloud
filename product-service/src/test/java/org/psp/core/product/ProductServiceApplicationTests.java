@@ -17,7 +17,8 @@ import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+        properties = {"eureka.client.enabled=false"})
 public class ProductServiceApplicationTests extends MongoDbTestBase {
     @Autowired
     private WebTestClient client;
