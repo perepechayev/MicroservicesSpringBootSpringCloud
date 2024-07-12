@@ -18,4 +18,4 @@ eureka:
     response-cache-update-interval-ms: 5000
 
 management.endpoint.web.exposure.include: "*"
-debug: true
+#debug: true
