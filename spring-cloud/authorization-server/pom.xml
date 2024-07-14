@@ -95,7 +95,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>3.2.2</version>
                 <configuration>
-                    <mainClass>org.psp.springcloud.eureka.EurekaServerApplication</mainClass>
+                    <mainClass>sample.OAuth2AuthorizationServerApplication</mainClass>
                     <layout>JAR</layout>
                 </configuration>
                 <executions>
